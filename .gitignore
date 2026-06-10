@@ -1,0 +1,9 @@
+node_modules/
+.DS_Store
+
+data.json
+compare.json
+
+.env
+.env.*
+*.log
