@@ -6,6 +6,16 @@ This is an unofficial fan-made tracker. It is not affiliated with, endorsed by, 
 
 ---
 
+## Features
+
+- Track owned, missing, and duplicate stickers.
+- Filter the album by all stickers, missing stickers, owned stickers, or extras.
+- Export the current filtered view as a `.txt` list.
+- Compare a friend's extras or missing list against your own collection.
+- Save all progress locally in plain JSON files.
+
+---
+
 ## Preview
 
 ### Album Tracker
@@ -15,16 +25,6 @@ This is an unofficial fan-made tracker. It is not affiliated with, endorsed by, 
 ### Compare Lists
 
 ![Compare screen showing trade matches from another collector's sticker list](docs/compare-view.png)
-
----
-
-## Features
-
-- Track owned, missing, and duplicate stickers.
-- Filter the album by all stickers, missing stickers, owned stickers, or extras.
-- Export the current filtered view as a `.txt` list.
-- Compare a friend's extras or missing list against your own collection.
-- Save all progress locally in plain JSON files.
 
 ---
 

@@ -640,17 +640,25 @@ function updateSticker(id) {
   }
 }
 
+function getSectionFlag(stickers) {
+  const firstId = stickers[0] || '';
+  const prefix = firstId.replace(/\d+$/, '');
+  return FLAG[firstId] || FLAG[prefix] || '';
+}
+
 function buildSection(title, stickers, isFoil, extraClass) {
   const section = document.createElement('section');
   section.className = 'section';
   section.dataset.section = title;
+  section.dataset.title = title;
 
   const header = document.createElement('div');
   header.className = 'section-header';
 
   const h2 = document.createElement('h2');
   h2.className = 'section-title';
-  h2.textContent = title;
+  const flag = getSectionFlag(stickers);
+  h2.textContent = flag ? `${flag} ${title}` : title;
 
   const prog = document.createElement('span');
   prog.className = 'section-progress';
@@ -796,7 +804,7 @@ function exportList() {
 
   document.querySelectorAll('.section:not(.hidden)').forEach(section => {
     const titleEl = section.querySelector('.section-title');
-    const title = titleEl ? titleEl.textContent : '';
+    const title = section.dataset.title || (titleEl ? titleEl.textContent : '');
 
     // Collect visible sticker cells
     const visibleCells = [...section.querySelectorAll('.sticker')]
@@ -856,10 +864,20 @@ function parsePaste(text) {
   return ids;
 }
 
+function getStickerGroup(id) {
+  if (/^\d+$/.test(id)) return '00';
+  return id.replace(/\d+$/, '');
+}
+
+function getGroupLabel(prefix) {
+  if (prefix === '00') return 'Panini';
+  return prefix;
+}
+
 function computeMatches(theirIds, mode) {
   const grouped = {};
   for (const id of theirIds) {
-    const prefix = id.replace(/\d+$/, '');
+    const prefix = getStickerGroup(id);
     const num = id.replace(/^[A-Za-z]+/, '');
     const myVal = getVal(id);
     const match = mode === 'extras' ? myVal === 0 : myVal >= 2;
@@ -894,6 +912,7 @@ function renderCompareBlock(entry) {
   } else {
     for (const prefix of prefixes.sort()) {
       const flag = FLAG[prefix] || '';
+      const label = getGroupLabel(prefix);
       const parts = grouped[prefix].map(({ num, myVal }) => {
         if (mode === 'missing') {
           const extras = myVal - 1;
@@ -901,7 +920,7 @@ function renderCompareBlock(entry) {
         }
         return `<span class="compare-match">${num}</span>`;
       });
-      html += `<div class="compare-result-row">${flag} <strong>${prefix}:</strong> ${parts.join(', ')}</div>`;
+      html += `<div class="compare-result-row">${flag} <strong>${label}:</strong> ${parts.join(', ')}</div>`;
     }
   }
 
