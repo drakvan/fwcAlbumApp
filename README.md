@@ -6,13 +6,35 @@ This is an unofficial fan-made tracker. It is not affiliated with, endorsed by, 
 
 ---
 
+## Preview
+
+### Album Tracker
+
+![Album tracker screen showing sticker progress, owned stickers, and extras](docs/album-view.png)
+
+### Compare Lists
+
+![Compare screen showing trade matches from another collector's sticker list](docs/compare-view.png)
+
+---
+
+## Features
+
+- Track owned, missing, and duplicate stickers.
+- Filter the album by all stickers, missing stickers, owned stickers, or extras.
+- Export the current filtered view as a `.txt` list.
+- Compare a friend's extras or missing list against your own collection.
+- Save all progress locally in plain JSON files.
+
+---
+
 ## Requirements
 
 You need **Node.js 18 or newer** installed on your computer. If you're not sure whether you have it:
 
 1. Open a terminal (on Mac: press `Cmd + Space`, type `Terminal`, press Enter)
 2. Type this and press Enter:
-   ```
+   ```sh
    node --version
    ```
 3. If you see version 18 or newer (like `v20.0.0`), you're good. If not, download Node.js from [nodejs.org](https://nodejs.org) and install it (choose the **LTS** version).
@@ -24,13 +46,13 @@ You need **Node.js 18 or newer** installed on your computer. If you're not sure 
 1. Download or copy this project folder to your computer.
 
 2. Open a terminal and navigate to the project folder:
-   ```
+   ```sh
    cd path/to/fwcAlbumApp
    ```
    *(Replace `path/to/fwcAlbumApp` with the actual path, e.g. `cd Documents/fwcAlbumApp`)*
 
 3. Install dependencies:
-   ```
+   ```sh
    npm install
    ```
    You only need to do this once.
@@ -40,17 +62,17 @@ You need **Node.js 18 or newer** installed on your computer. If you're not sure 
 ## Running the App
 
 Start the server:
-```
+```sh
 npm start
 ```
 
 You should see:
-```
+```text
 FWC 2026 Album running at http://localhost:3000
 ```
 
 Open your browser and go to:
-```
+```text
 http://localhost:3000
 ```
 
@@ -59,12 +81,12 @@ To stop the server, go back to the terminal and press `Ctrl + C`.
 ### Running in the background
 
 If you want the server to keep running after you close the terminal, install **pm2**:
-```
+```sh
 npm install -g pm2
 ```
 
 Then manage the app with:
-```
+```sh
 pm2 start server.js --name fwcAlbumApp    # start
 pm2 stop fwcAlbumApp                      # stop
 pm2 restart fwcAlbumApp                   # restart
