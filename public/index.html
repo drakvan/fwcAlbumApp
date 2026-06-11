@@ -31,7 +31,12 @@
     <button data-filter="extras">Extras</button>
   </div>
 
-<div class="settings-panel" aria-label="Display settings">
+<div class="edit-lock-control">
+  <span class="edit-lock-status" id="edit-lock-status">Editing</span>
+  <button class="edit-lock-toggle" id="edit-lock-toggle" type="button" aria-label="Lock edits" title="Lock edits" aria-pressed="false">🔓</button>
+</div>
+<button class="settings-toggle" id="settings-toggle" type="button" aria-label="Settings" title="Settings" aria-expanded="false" aria-controls="settings-panel">⚙</button>
+<div class="settings-panel" id="settings-panel" aria-label="Display settings">
   <label class="settings-field">
     <span class="settings-label" id="language-label">Language</span>
     <select class="settings-select" id="language-select">

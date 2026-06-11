@@ -622,6 +622,14 @@ main {
   transform: scale(0.97);
 }
 
+body.edits-locked .sticker {
+  cursor: not-allowed;
+}
+
+body.edits-locked .sticker:hover {
+  transform: none;
+}
+
 .sticker .code {
   font-size: clamp(0.45rem, 1.2vw, 0.6rem);
   font-weight: 700;
@@ -724,6 +732,22 @@ main {
   color: #e53935;
 }
 
+.reset-btn:disabled,
+.compare-btn:disabled,
+.compare-remove-btn:disabled,
+.compare-input:disabled,
+.compare-mode:disabled,
+.compare-textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.compare-input:disabled,
+.compare-mode:disabled,
+.compare-textarea:disabled {
+  background: color-mix(in srgb, var(--panel-strong) 74%, var(--bg));
+}
+
 .export-btn {
   background: transparent;
   border: 1px solid #444;
@@ -738,6 +762,89 @@ main {
 .export-btn:hover {
   border-color: #4caf82;
   color: #4caf82;
+}
+
+.edit-lock-control {
+  position: absolute;
+  top: 12px;
+  right: 62px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-toggle,
+.edit-lock-toggle {
+  position: absolute;
+  top: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.settings-toggle {
+  right: 16px;
+}
+
+.edit-lock-toggle {
+  position: static;
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success);
+}
+
+.edit-lock-status {
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  border-radius: 999px;
+  color: var(--success);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  padding: 5px 7px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+body.edits-locked .edit-lock-status {
+  background: color-mix(in srgb, var(--danger) 18%, var(--panel));
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.settings-toggle:hover,
+.settings-toggle[aria-expanded="true"],
+.edit-lock-toggle:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.edit-lock-toggle[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--danger) 18%, var(--panel));
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.edit-lock-toggle[aria-pressed="true"]:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
 }
 
 .header-row {
@@ -904,9 +1011,9 @@ main {
 .settings-panel {
   position: absolute;
   right: 16px;
-  top: 12px;
+  top: 58px;
   z-index: 2;
-  display: grid;
+  display: none;
   grid-template-columns: 1fr;
   gap: 8px;
   align-items: stretch;
@@ -916,6 +1023,10 @@ main {
   box-shadow: 0 10px 28px var(--shadow);
   padding: 10px;
   text-align: left;
+}
+
+.settings-panel.open {
+  display: grid;
 }
 
 .settings-field {
@@ -1145,12 +1256,39 @@ header h1,
   color: var(--danger);
 }
 
+.reset-btn:disabled:hover,
+.compare-remove-btn:disabled:hover,
+.compare-btn:disabled:hover {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--muted);
+}
+
+.compare-btn:disabled:hover {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
 @media (max-width: 900px) {
+  .settings-toggle,
+  .edit-lock-control {
+    right: 12px;
+    top: 10px;
+  }
+
+  .edit-lock-control {
+    right: 58px;
+  }
+
+  .edit-lock-status {
+    display: none;
+  }
+
   .settings-panel {
-    position: static;
+    right: 12px;
+    top: 54px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: 360px;
-    margin: 12px auto 0;
+    max-width: min(360px, calc(100vw - 24px));
   }
 
   .settings-select {
@@ -1187,6 +1325,8 @@ header h1,
 
   .settings-panel {
     grid-template-columns: 1fr 1fr;
+    max-width: none;
+    left: 12px;
   }
 
   .settings-select {

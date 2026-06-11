@@ -62,6 +62,7 @@ let state = {};
 let saveTimer = null;
 let currentLanguage = localStorage.getItem('fwc-language') || 'en';
 let currentTheme = localStorage.getItem('fwc-theme') || 'default';
+let editsLocked = localStorage.getItem('fwc-edits-locked') === 'true';
 
 const I18N = {
   en: {
@@ -82,6 +83,11 @@ const I18N = {
     sections: 'Sections',
     fwcSection: 'FWC — Special Stickers',
     cocaCola: 'Coca-Cola',
+    settings: 'Settings',
+    editingStatus: 'Editing',
+    lockedStatus: 'Locked',
+    lockEdits: 'Lock edits',
+    unlockEdits: 'Unlock edits',
     language: 'Language',
     theme: 'Theme',
     midnightGold: 'Dark / Midnight Gold',
@@ -129,6 +135,11 @@ const I18N = {
     sections: 'Secciones',
     fwcSection: 'FWC — Estampas especiales',
     cocaCola: 'Coca-Cola',
+    settings: 'Configuración',
+    editingStatus: 'Editando',
+    lockedStatus: 'Bloqueado',
+    lockEdits: 'Bloquear edición',
+    unlockEdits: 'Desbloquear edición',
     language: 'Idioma',
     theme: 'Tema',
     midnightGold: 'Oscuro / Medianoche dorada',
@@ -239,6 +250,28 @@ function applyTheme(theme) {
   updateSidebarOffset();
 }
 
+function applyEditLock() {
+  const text = getText();
+  const lockButton = document.getElementById('edit-lock-toggle');
+  const status = document.getElementById('edit-lock-status');
+  const lockedLabel = editsLocked ? text.unlockEdits : text.lockEdits;
+  lockButton.textContent = editsLocked ? '🔒' : '🔓';
+  status.textContent = editsLocked ? text.lockedStatus : text.editingStatus;
+  lockButton.setAttribute('aria-label', lockedLabel);
+  lockButton.setAttribute('title', lockedLabel);
+  lockButton.setAttribute('aria-pressed', editsLocked ? 'true' : 'false');
+  document.body.classList.toggle('edits-locked', editsLocked);
+
+  document.getElementById('reset-btn').disabled = editsLocked;
+  document.getElementById('compare-name').disabled = editsLocked;
+  document.getElementById('compare-mode').disabled = editsLocked;
+  document.getElementById('compare-paste').disabled = editsLocked;
+  document.getElementById('compare-btn').disabled = editsLocked;
+  document.querySelectorAll('.compare-remove-btn').forEach(button => {
+    button.disabled = editsLocked;
+  });
+}
+
 function setText(id, text) {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
@@ -260,6 +293,9 @@ function applyLanguage(language) {
   setText('reset-btn', text.reset);
   setText('complete-sections-label', text.completeSections);
   setText('sections-label', text.sections);
+  const settingsToggle = document.getElementById('settings-toggle');
+  settingsToggle.setAttribute('aria-label', text.settings);
+  settingsToggle.setAttribute('title', text.settings);
   setText('language-label', text.language);
   setText('theme-label', text.theme);
 
@@ -300,6 +336,7 @@ function applyLanguage(language) {
 
   updateSectionTitles();
   updateCountryList();
+  applyEditLock();
   updateSidebarOffset();
   loadCompareHistory();
 }
@@ -307,6 +344,7 @@ function applyLanguage(language) {
 function getVal(id) { return state[id] || 0; }
 
 function handleClick(id) {
+  if (editsLocked) return;
   const v = getVal(id);
   state[id] = v + 1;
   saveState();
@@ -318,6 +356,7 @@ function handleClick(id) {
 
 function handleRightClick(e, id) {
   e.preventDefault();
+  if (editsLocked) return;
   const v = getVal(id);
   if (v <= 0) return;
   state[id] = v - 1;
@@ -511,6 +550,18 @@ function updateSidebarOffset() {
   const header = document.querySelector('header');
   const headerHeight = header ? Math.ceil(header.getBoundingClientRect().height) : 0;
   document.documentElement.style.setProperty('--sidebar-top', `${headerHeight + 12}px`);
+}
+
+function setSettingsOpen(isOpen) {
+  const panel = document.getElementById('settings-panel');
+  const toggle = document.getElementById('settings-toggle');
+  panel.classList.toggle('open', isOpen);
+  toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  updateSidebarOffset();
+}
+
+function closeSettingsPanel() {
+  setSettingsOpen(false);
 }
 
 function scrollToAlbumSection(section) {
@@ -801,7 +852,9 @@ function renderCompareBlock(entry) {
   }
 
   block.innerHTML = html;
-  block.querySelector('.compare-remove-btn').addEventListener('click', () => removeCompareEntry(id));
+  const removeButton = block.querySelector('.compare-remove-btn');
+  removeButton.disabled = editsLocked;
+  removeButton.addEventListener('click', () => removeCompareEntry(id));
   return block;
 }
 
@@ -816,12 +869,14 @@ async function loadCompareHistory() {
 }
 
 async function removeCompareEntry(id) {
+  if (editsLocked) return;
   await fetch(`/api/compare/${id}`, { method: 'DELETE' });
   const block = document.querySelector(`.compare-result-block[data-id="${id}"]`);
   if (block) block.remove();
 }
 
 async function runCompare() {
+  if (editsLocked) return;
   const name = document.getElementById('compare-name').value.trim() || 'Result';
   const mode = document.getElementById('compare-mode').value;
   const paste = document.getElementById('compare-paste').value;
@@ -853,6 +908,7 @@ async function runCompare() {
 document.getElementById('compare-btn').addEventListener('click', runCompare);
 
 document.getElementById('reset-btn').addEventListener('click', () => {
+  if (editsLocked) return;
   if (confirm(getText().resetConfirm)) {
     state = {};
     saveState();
@@ -863,12 +919,37 @@ document.getElementById('reset-btn').addEventListener('click', () => {
   }
 });
 
+document.getElementById('edit-lock-toggle').addEventListener('click', () => {
+  editsLocked = !editsLocked;
+  localStorage.setItem('fwc-edits-locked', editsLocked ? 'true' : 'false');
+  applyEditLock();
+});
+
+document.getElementById('settings-toggle').addEventListener('click', () => {
+  const panel = document.getElementById('settings-panel');
+  setSettingsOpen(!panel.classList.contains('open'));
+});
+
+document.addEventListener('click', e => {
+  const panel = document.getElementById('settings-panel');
+  const toggle = document.getElementById('settings-toggle');
+  if (!panel.classList.contains('open')) return;
+  if (panel.contains(e.target) || toggle.contains(e.target)) return;
+  closeSettingsPanel();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSettingsPanel();
+});
+
 document.getElementById('language-select').addEventListener('change', e => {
   applyLanguage(e.target.value);
+  closeSettingsPanel();
 });
 
 document.getElementById('theme-select').addEventListener('change', e => {
   applyTheme(e.target.value);
+  closeSettingsPanel();
 });
 
 // Init
@@ -878,6 +959,7 @@ buildAlbum();
 buildCountryList();
 applyTheme(currentTheme);
 applyLanguage(currentLanguage);
+applyEditLock();
 loadState().then(() => {
   updateSidebarOffset();
   refreshAllStickers();
