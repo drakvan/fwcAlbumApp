@@ -64,6 +64,27 @@ You need **Node.js 18 or newer** installed on your computer. If you're not sure 
 
 ---
 
+## Project Structure
+
+```text
+fwcAlbumApp/
+├── public/
+│   ├── index.html        # Page markup
+│   ├── css/
+│   │   └── styles.css    # Layout, themes, and sticker styling
+│   └── js/
+│       └── app.js        # Album data, state updates, filters, compare, language/theme logic
+├── server.js         # Express server and JSON persistence endpoints
+├── data/             # Local user data files ignored by git
+│   ├── data.json     # Your sticker collection state
+│   └── compare.json  # Saved compare results
+└── README.md
+```
+
+The frontend is split by responsibility: HTML for structure, CSS for presentation, and JavaScript for behavior.
+
+---
+
 ## Running the App
 
 Start the server:
@@ -151,9 +172,11 @@ Results are saved and will still be there when you reload the page. Click **Remo
 
 ## Your Data
 
-All your progress is saved in a file called `data.json` in the app folder. Compare history is saved in `compare.json`. These are plain text files — you can open them, back them up, or copy them to another computer.
+All your progress is saved in `data/data.json`. Compare history is saved in `data/compare.json`. These are plain text files — you can open them, back them up, or copy them to another computer.
 
-Language and theme settings are saved separately in your browser's `localStorage` as `fwc-language` and `fwc-theme`. They are per browser/device and are not stored in `data.json`.
+The `data/` folder is for local runtime data and is ignored by git, except for a small `data/.gitkeep` placeholder that keeps the folder in the project structure.
+
+Language and theme settings are saved separately in your browser's `localStorage` as `fwc-language` and `fwc-theme`. They are per browser/device and are not stored in `data/data.json`.
 
 Your data is **not** stored in the cloud. It lives entirely on your machine.
 
@@ -183,4 +206,4 @@ If you already have your sticker list written down somewhere (paper, spreadsheet
 
 ---
 
-Once you get the JSON back, save it as `data.json` in the app folder (replacing the existing file if there is one), then reload the app in your browser.
+Once you get the JSON back, save it as `data/data.json` in the app folder (replacing the existing file if there is one), then reload the app in your browser.

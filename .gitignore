@@ -1,8 +1,8 @@
 node_modules/
 .DS_Store
 
-data.json
-compare.json
+data/*
+!data/.gitkeep
 
 .env
 .env.*
