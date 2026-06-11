@@ -104,10 +104,98 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    main {
+    .album-layout {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 20px;
       padding: 24px 16px;
       max-width: 1400px;
       margin: 0 auto;
+    }
+
+    .country-sidebar {
+      position: sticky;
+      top: 136px;
+      align-self: start;
+      max-height: calc(100vh - 160px);
+      overflow: auto;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      background: #111126;
+    }
+
+    .country-sidebar-title {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #111126;
+      border-bottom: 1px solid #2a2a4a;
+      color: #c8a84b;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 10px 12px;
+      text-transform: uppercase;
+    }
+
+    .country-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 6px;
+    }
+
+    .country-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      min-height: 34px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: #aaa;
+      cursor: pointer;
+      font: inherit;
+      padding: 6px 8px;
+      text-align: left;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .country-row:hover {
+      background: #1a1a2e;
+      border-color: #333356;
+      color: #e0e0e0;
+    }
+
+    .country-row.complete {
+      background: #173423;
+      border-color: #2e7d52;
+      color: #b7f0ce;
+    }
+
+    .country-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .country-completion {
+      color: #777;
+      font-size: 0.7rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .country-row.complete .country-completion {
+      color: #5dba8a;
+    }
+
+    main {
+      min-width: 0;
     }
 
     .section {
@@ -454,6 +542,24 @@
       color: #e53935;
     }
 
+    @media (max-width: 900px) {
+      .album-layout {
+        display: block;
+        padding: 16px 12px;
+      }
+
+      .country-sidebar {
+        position: static;
+        max-height: none;
+        margin-bottom: 20px;
+      }
+
+      .country-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+
     @media (max-width: 480px) {
       .grid {
         grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
@@ -476,6 +582,7 @@
   <div class="header-row">
     <div class="stats-bar">
       <span>Owned: <strong id="stat-owned">0</strong> / 994</span>
+      <span>Missing: <strong id="stat-missing">994</strong></span>
       <span>Extras: <strong id="stat-extras">0</strong></span>
       <span>Completion: <strong id="stat-pct">0%</strong></span>
     </div>
@@ -495,7 +602,13 @@
 </header>
 
 <div class="tab-panel active" id="panel-album">
-  <main id="main"></main>
+  <div class="album-layout">
+    <aside class="country-sidebar" aria-label="Country completion">
+      <div class="country-sidebar-title">Sections</div>
+      <div class="country-list" id="country-list"></div>
+    </aside>
+    <main id="main"></main>
+  </div>
 </div>
 
 <div class="tab-panel" id="panel-compare">
@@ -607,6 +720,7 @@ function handleClick(id) {
   saveState();
   updateSticker(id);
   updateStats();
+  updateCountryList();
   applyFilter(currentFilter);
 }
 
@@ -619,6 +733,7 @@ function handleRightClick(e, id) {
   saveState();
   updateSticker(id);
   updateStats();
+  updateCountryList();
   applyFilter(currentFilter);
 }
 
@@ -646,11 +761,12 @@ function getSectionFlag(stickers) {
   return FLAG[firstId] || FLAG[prefix] || '';
 }
 
-function buildSection(title, stickers, isFoil, extraClass) {
+function buildSection(title, stickers, isFoil, extraClass, sectionKey) {
   const section = document.createElement('section');
   section.className = 'section';
   section.dataset.section = title;
   section.dataset.title = title;
+  if (sectionKey) section.dataset.group = sectionKey;
 
   const header = document.createElement('div');
   header.className = 'section-header';
@@ -696,19 +812,77 @@ function buildAlbum() {
   main.innerHTML = '';
 
   // Panini logo sticker
-  main.appendChild(buildSection('Panini', ALBUM_DATA.panini, true));
+  main.appendChild(buildSection('Panini', ALBUM_DATA.panini, true, '', 'PANINI'));
 
   // Special / FWC stickers
-  main.appendChild(buildSection('FWC — Special Stickers', ALBUM_DATA.special, true));
+  main.appendChild(buildSection('FWC — Special Stickers', ALBUM_DATA.special, true, '', 'FWC'));
 
   // Team sections
   ALBUM_DATA.teams.forEach(team => {
     const ids = Array.from({length: team.count}, (_, i) => team.code + (i + 1));
-    main.appendChild(buildSection(team.code + ' — ' + team.name, ids, false));
+    main.appendChild(buildSection(team.code + ' — ' + team.name, ids, false, '', team.code));
   });
 
   // Coca-Cola section
-  main.appendChild(buildSection('CocaCola', ALBUM_DATA.cocacola, false, 'cocacola'));
+  main.appendChild(buildSection('CocaCola', ALBUM_DATA.cocacola, false, 'cocacola', 'CC'));
+}
+
+function getSidebarSections() {
+  return [
+    { key: 'PANINI', name: 'Panini', flag: FLAG['00'], ids: ALBUM_DATA.panini },
+    { key: 'FWC', name: 'FWC', flag: FLAG.FWC, ids: ALBUM_DATA.special },
+    ...ALBUM_DATA.teams.map(team => ({
+      key: team.code,
+      name: team.name,
+      flag: FLAG[team.code],
+      ids: Array.from({length: team.count}, (_, i) => team.code + (i + 1))
+    })),
+    { key: 'CC', name: 'Coca-Cola', flag: FLAG.CC, ids: ALBUM_DATA.cocacola }
+  ];
+}
+
+function getOwnedCount(ids) {
+  return ids.reduce((owned, id) => owned + (getVal(id) >= 1 ? 1 : 0), 0);
+}
+
+function buildCountryList() {
+  const list = document.getElementById('country-list');
+  list.innerHTML = '';
+
+  getSidebarSections().forEach(sectionData => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'country-row';
+    row.dataset.group = sectionData.key;
+    row.addEventListener('click', () => {
+      const section = document.querySelector(`.section[data-group="${sectionData.key}"]`);
+      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    const name = document.createElement('span');
+    name.className = 'country-name';
+    const flag = sectionData.flag || '';
+    name.textContent = flag ? `${flag} ${sectionData.name}` : sectionData.name;
+
+    const completion = document.createElement('span');
+    completion.className = 'country-completion';
+
+    row.appendChild(name);
+    row.appendChild(completion);
+    list.appendChild(row);
+  });
+}
+
+function updateCountryList() {
+  getSidebarSections().forEach(sectionData => {
+    const row = document.querySelector(`.country-row[data-group="${sectionData.key}"]`);
+    if (!row) return;
+    const owned = getOwnedCount(sectionData.ids);
+    const total = sectionData.ids.length;
+    const pct = Math.round((owned / total) * 100);
+    row.classList.toggle('complete', owned === total);
+    row.querySelector('.country-completion').textContent = `${owned}/${total} ${pct}%`;
+  });
 }
 
 function updateStats() {
@@ -718,6 +892,7 @@ function updateStats() {
     if (v >= 2) extras += (v - 1);
   });
   document.getElementById('stat-owned').textContent = owned;
+  document.getElementById('stat-missing').textContent = 994 - owned;
   document.getElementById('stat-extras').textContent = extras;
   document.getElementById('stat-pct').textContent = Math.round(owned / 994 * 100) + '%';
 
@@ -979,15 +1154,18 @@ document.getElementById('reset-btn').addEventListener('click', () => {
     saveState();
     refreshAllStickers();
     updateStats();
+    updateCountryList();
     applyFilter(currentFilter);
   }
 });
 
 // Init
 buildAlbum();
+buildCountryList();
 loadState().then(() => {
   refreshAllStickers();
   updateStats();
+  updateCountryList();
 });
 loadCompareHistory();
 </script>
