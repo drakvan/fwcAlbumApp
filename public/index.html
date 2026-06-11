@@ -106,10 +106,10 @@
 
     .album-layout {
       display: grid;
-      grid-template-columns: 240px minmax(0, 1fr);
-      gap: 20px;
+      grid-template-columns: 230px minmax(0, 1fr) 230px;
+      gap: 16px;
       padding: 24px 16px;
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
     }
 
@@ -134,31 +134,31 @@
       font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.08em;
-      padding: 10px 12px;
+      padding: 8px 10px;
       text-transform: uppercase;
     }
 
     .country-list {
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      padding: 6px;
+      gap: 1px;
+      padding: 5px;
     }
 
     .country-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
       width: 100%;
-      min-height: 34px;
+      min-height: 30px;
       background: transparent;
       border: 1px solid transparent;
       border-radius: 6px;
       color: #aaa;
       cursor: pointer;
       font: inherit;
-      padding: 6px 8px;
+      padding: 5px 7px;
       text-align: left;
       transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
@@ -179,13 +179,13 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 600;
     }
 
     .country-completion {
       color: #777;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       white-space: nowrap;
     }
@@ -196,6 +196,37 @@
 
     main {
       min-width: 0;
+    }
+
+    .missing-tooltip {
+      position: fixed;
+      z-index: 300;
+      display: none;
+      max-width: min(360px, calc(100vw - 24px));
+      background: #080815;
+      border: 1px solid #c8a84b;
+      border-radius: 6px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+      color: #e0e0e0;
+      font-size: 0.74rem;
+      line-height: 1.45;
+      padding: 8px 10px;
+      pointer-events: none;
+      word-break: break-word;
+    }
+
+    .missing-tooltip.visible {
+      display: block;
+    }
+
+    .missing-tooltip-label {
+      color: #c8a84b;
+      display: block;
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+      text-transform: uppercase;
     }
 
     .section {
@@ -544,7 +575,7 @@
 
     @media (max-width: 900px) {
       .album-layout {
-        display: block;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         padding: 16px 12px;
       }
 
@@ -552,6 +583,12 @@
         position: static;
         max-height: none;
         margin-bottom: 20px;
+        order: 1;
+      }
+
+      main {
+        grid-column: 1 / -1;
+        order: 2;
       }
 
       .country-list {
@@ -561,6 +598,10 @@
     }
 
     @media (max-width: 480px) {
+      .album-layout {
+        grid-template-columns: 1fr;
+      }
+
       .grid {
         grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
         gap: 5px;
@@ -605,11 +646,17 @@
   <div class="album-layout">
     <aside class="country-sidebar" aria-label="Country completion">
       <div class="country-sidebar-title">Sections</div>
-      <div class="country-list" id="country-list"></div>
+      <div class="country-list" id="country-list-left"></div>
     </aside>
     <main id="main"></main>
+    <aside class="country-sidebar" aria-label="More country completion">
+      <div class="country-sidebar-title">Sections</div>
+      <div class="country-list" id="country-list-right"></div>
+    </aside>
   </div>
 </div>
+
+<div class="missing-tooltip" id="missing-tooltip"></div>
 
 <div class="tab-panel" id="panel-compare">
   <div class="compare-section">
@@ -845,19 +892,77 @@ function getOwnedCount(ids) {
   return ids.reduce((owned, id) => owned + (getVal(id) >= 1 ? 1 : 0), 0);
 }
 
-function buildCountryList() {
-  const list = document.getElementById('country-list');
-  list.innerHTML = '';
+function getMissingLabel(ids) {
+  const missing = ids
+    .filter(id => getVal(id) < 1)
+    .map(id => id.replace(/^[A-Za-z]+/, ''));
+  return missing.length === 0 ? 'Complete!' : missing.join(', ');
+}
 
-  getSidebarSections().forEach(sectionData => {
+function positionMissingTooltip(x, y) {
+  const tooltip = document.getElementById('missing-tooltip');
+  const offset = 12;
+  let left = x + offset;
+  let top = y + offset;
+  const rect = tooltip.getBoundingClientRect();
+
+  if (left + rect.width > window.innerWidth - offset) {
+    left = Math.max(offset, x - rect.width - offset);
+  }
+  if (top + rect.height > window.innerHeight - offset) {
+    top = Math.max(offset, y - rect.height - offset);
+  }
+
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
+}
+
+function showMissingTooltip(text, x, y) {
+  const tooltip = document.getElementById('missing-tooltip');
+  tooltip.textContent = '';
+  if (text === 'Complete!') {
+    tooltip.textContent = text;
+  } else {
+    const label = document.createElement('span');
+    label.className = 'missing-tooltip-label';
+    label.textContent = 'Missing';
+    tooltip.appendChild(label);
+    tooltip.appendChild(document.createTextNode(text));
+  }
+  tooltip.classList.add('visible');
+  positionMissingTooltip(x, y);
+}
+
+function hideMissingTooltip() {
+  document.getElementById('missing-tooltip').classList.remove('visible');
+}
+
+function buildCountryList() {
+  const leftList = document.getElementById('country-list-left');
+  const rightList = document.getElementById('country-list-right');
+  const sections = getSidebarSections();
+  const splitIndex = Math.ceil(sections.length / 2);
+  leftList.innerHTML = '';
+  rightList.innerHTML = '';
+
+  sections.forEach((sectionData, index) => {
     const row = document.createElement('button');
     row.type = 'button';
     row.className = 'country-row';
     row.dataset.group = sectionData.key;
+    row.dataset.missing = getMissingLabel(sectionData.ids);
     row.addEventListener('click', () => {
       const section = document.querySelector(`.section[data-group="${sectionData.key}"]`);
       if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+    row.addEventListener('mouseenter', e => showMissingTooltip(row.dataset.missing || '', e.clientX, e.clientY));
+    row.addEventListener('mousemove', e => positionMissingTooltip(e.clientX, e.clientY));
+    row.addEventListener('mouseleave', hideMissingTooltip);
+    row.addEventListener('focus', () => {
+      const rect = row.getBoundingClientRect();
+      showMissingTooltip(row.dataset.missing || '', rect.right, rect.top);
+    });
+    row.addEventListener('blur', hideMissingTooltip);
 
     const name = document.createElement('span');
     name.className = 'country-name';
@@ -869,6 +974,7 @@ function buildCountryList() {
 
     row.appendChild(name);
     row.appendChild(completion);
+    const list = index < splitIndex ? leftList : rightList;
     list.appendChild(row);
   });
 }
@@ -881,6 +987,7 @@ function updateCountryList() {
     const total = sectionData.ids.length;
     const pct = Math.round((owned / total) * 100);
     row.classList.toggle('complete', owned === total);
+    row.dataset.missing = getMissingLabel(sectionData.ids);
     row.querySelector('.country-completion').textContent = `${owned}/${total} ${pct}%`;
   });
 }
