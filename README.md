@@ -9,9 +9,14 @@ This is an unofficial fan-made tracker. It is not affiliated with, endorsed by, 
 ## Features
 
 - Track owned, missing, and duplicate stickers.
+- See overall owned, missing, extras, completion, and completed-section counts.
+- Navigate by section from fixed left and right progress lists.
+- Hover a section to see its missing sticker numbers.
 - Filter the album by all stickers, missing stickers, owned stickers, or extras.
 - Export the current filtered view as a `.txt` list.
 - Compare a friend's extras or missing list against your own collection.
+- Switch the interface between English and Spanish.
+- Choose from multiple dark and light color themes.
 - Save all progress locally in plain JSON files.
 
 ---
@@ -104,6 +109,14 @@ pm2 startup                               # auto-start when your computer boots
 - **Each additional click** → badge count increases (`+2`, `+3`, …)
 - **Right-click a sticker** → removes one count (undo)
 
+The top bar shows your overall progress:
+- **Owned** — stickers you have
+- **Missing** — stickers you still need
+- **Extras** — duplicate stickers available for trades
+- **Completion** — overall album percentage
+
+The fixed section lists on the left and right show progress for Panini, FWC, each country, and Coca-Cola. Completed sections are highlighted. Click a section to jump to it, or hover over it to see a compact list of missing sticker numbers. If the section is complete, the hover popup shows `Complete!`.
+
 Use the filter buttons to view:
 - **All** — every sticker
 - **Missing** — stickers you don't have yet
@@ -111,6 +124,15 @@ Use the filter buttons to view:
 - **Extras** — stickers you have duplicates of
 
 Use the **Export** button to download the current view as a `.txt` file. The filter you have active determines what gets exported — for example, switch to *Extras* before exporting to share your duplicate list with a friend.
+
+### Display settings
+
+Use the controls in the bottom-right corner to customize the interface:
+
+- **Language** — English or Spanish. Spanish also translates country names in the section lists and album headings.
+- **Theme** — choose between Dark / Midnight Gold, Dark / Emerald, Dark / Ruby, Dark / Frost, Light / Daylight, Light / Mint, Light / Blush, and Light / Sage Cream.
+
+These display settings are saved in your browser, so they persist when you reload the app on the same device.
 
 ### Compare tab
 
@@ -130,6 +152,8 @@ Results are saved and will still be there when you reload the page. Click **Remo
 ## Your Data
 
 All your progress is saved in a file called `data.json` in the app folder. Compare history is saved in `compare.json`. These are plain text files — you can open them, back them up, or copy them to another computer.
+
+Language and theme settings are saved separately in your browser's `localStorage` as `fwc-language` and `fwc-theme`. They are per browser/device and are not stored in `data.json`.
 
 Your data is **not** stored in the cloud. It lives entirely on your machine.
 
