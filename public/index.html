@@ -115,9 +115,9 @@
 
     .country-sidebar {
       position: sticky;
-      top: 136px;
+      top: var(--sidebar-top, 136px);
       align-self: start;
-      max-height: calc(100vh - 160px);
+      max-height: calc(100vh - var(--sidebar-top, 136px) - 16px);
       overflow: auto;
       border: 1px solid #2a2a4a;
       border-radius: 8px;
@@ -645,7 +645,7 @@
 <div class="tab-panel active" id="panel-album">
   <div class="album-layout">
     <aside class="country-sidebar" aria-label="Country completion">
-      <div class="country-sidebar-title">Sections</div>
+      <div class="country-sidebar-title">Complete Sections: <span id="complete-sections-count">0</span> / <span id="complete-sections-total">0</span></div>
       <div class="country-list" id="country-list-left"></div>
     </aside>
     <main id="main"></main>
@@ -937,6 +937,19 @@ function hideMissingTooltip() {
   document.getElementById('missing-tooltip').classList.remove('visible');
 }
 
+function updateSidebarOffset() {
+  const header = document.querySelector('header');
+  const headerHeight = header ? Math.ceil(header.getBoundingClientRect().height) : 0;
+  document.documentElement.style.setProperty('--sidebar-top', `${headerHeight + 12}px`);
+}
+
+function scrollToAlbumSection(section) {
+  const header = document.querySelector('header');
+  const headerOffset = header ? header.getBoundingClientRect().height : 0;
+  const targetTop = section.getBoundingClientRect().top + window.scrollY - headerOffset - 14;
+  window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+}
+
 function buildCountryList() {
   const leftList = document.getElementById('country-list-left');
   const rightList = document.getElementById('country-list-right');
@@ -953,7 +966,7 @@ function buildCountryList() {
     row.dataset.missing = getMissingLabel(sectionData.ids);
     row.addEventListener('click', () => {
       const section = document.querySelector(`.section[data-group="${sectionData.key}"]`);
-      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (section) scrollToAlbumSection(section);
     });
     row.addEventListener('mouseenter', e => showMissingTooltip(row.dataset.missing || '', e.clientX, e.clientY));
     row.addEventListener('mousemove', e => positionMissingTooltip(e.clientX, e.clientY));
@@ -980,16 +993,24 @@ function buildCountryList() {
 }
 
 function updateCountryList() {
-  getSidebarSections().forEach(sectionData => {
+  let completeSections = 0;
+  const sections = getSidebarSections();
+
+  sections.forEach(sectionData => {
     const row = document.querySelector(`.country-row[data-group="${sectionData.key}"]`);
     if (!row) return;
     const owned = getOwnedCount(sectionData.ids);
     const total = sectionData.ids.length;
     const pct = Math.round((owned / total) * 100);
-    row.classList.toggle('complete', owned === total);
+    const isComplete = owned === total;
+    if (isComplete) completeSections++;
+    row.classList.toggle('complete', isComplete);
     row.dataset.missing = getMissingLabel(sectionData.ids);
     row.querySelector('.country-completion').textContent = `${owned}/${total} ${pct}%`;
   });
+
+  document.getElementById('complete-sections-count').textContent = completeSections;
+  document.getElementById('complete-sections-total').textContent = sections.length;
 }
 
 function updateStats() {
@@ -1267,9 +1288,12 @@ document.getElementById('reset-btn').addEventListener('click', () => {
 });
 
 // Init
+updateSidebarOffset();
+window.addEventListener('resize', updateSidebarOffset);
 buildAlbum();
 buildCountryList();
 loadState().then(() => {
+  updateSidebarOffset();
   refreshAllStickers();
   updateStats();
   updateCountryList();
