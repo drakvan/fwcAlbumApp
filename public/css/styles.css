@@ -902,19 +902,20 @@ main {
 }
 
 .settings-panel {
-  position: fixed;
+  position: absolute;
   right: 16px;
-  bottom: 16px;
-  z-index: 400;
+  top: 12px;
+  z-index: 2;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr;
   gap: 8px;
-  align-items: end;
+  align-items: stretch;
   background: color-mix(in srgb, var(--panel) 94%, transparent);
   border: 1px solid var(--border);
   border-radius: 8px;
   box-shadow: 0 10px 28px var(--shadow);
   padding: 10px;
+  text-align: left;
 }
 
 .settings-field {
@@ -931,7 +932,7 @@ main {
 }
 
 .settings-select {
-  min-width: 118px;
+  width: 150px;
   background: var(--panel-strong);
   border: 1px solid var(--border-strong);
   border-radius: 6px;
@@ -1145,6 +1146,17 @@ header h1,
 }
 
 @media (max-width: 900px) {
+  .settings-panel {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 360px;
+    margin: 12px auto 0;
+  }
+
+  .settings-select {
+    width: 100%;
+  }
+
   .album-layout {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     padding: 16px 12px;
@@ -1174,9 +1186,6 @@ header h1,
   }
 
   .settings-panel {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
     grid-template-columns: 1fr 1fr;
   }
 
