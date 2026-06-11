@@ -7,9 +7,161 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg: #0a0a1a;
+      --header-bg: linear-gradient(135deg, #1a1a3e 0%, #0d2b5e 50%, #1a1a3e 100%);
+      --panel: #111126;
+      --panel-strong: #1a1a2e;
+      --panel-hover: #22223c;
+      --border: #2a2a4a;
+      --border-strong: #444;
+      --text: #e0e0e0;
+      --muted: #aaa;
+      --muted-strong: #888;
+      --muted-soft: #666;
+      --accent: #c8a84b;
+      --accent-hover: #daba60;
+      --accent-text: #000;
+      --success: #4caf82;
+      --success-bg: #173423;
+      --success-border: #2e7d52;
+      --success-text: #b7f0ce;
+      --danger: #e53935;
+      --shadow: rgba(0, 0, 0, 0.4);
+    }
+
+    body[data-theme="emerald"] {
+      --bg: #061512;
+      --header-bg: linear-gradient(135deg, #082018 0%, #12372e 52%, #071512 100%);
+      --panel: #0c1f1b;
+      --panel-strong: #112b24;
+      --panel-hover: #18382f;
+      --border: #1d493d;
+      --border-strong: #2f6d5b;
+      --text: #e5f5ef;
+      --muted: #a9c7bd;
+      --muted-strong: #86aa9d;
+      --muted-soft: #6f9286;
+      --accent: #7fd8aa;
+      --accent-hover: #9ce8c2;
+      --accent-text: #061512;
+      --success: #8be6b5;
+      --success-bg: #123725;
+      --success-border: #3d9b6a;
+      --success-text: #d8f8e6;
+    }
+
+    body[data-theme="ruby"] {
+      --bg: #16090f;
+      --header-bg: linear-gradient(135deg, #2a0d17 0%, #4a1426 50%, #180910 100%);
+      --panel: #221018;
+      --panel-strong: #301622;
+      --panel-hover: #3d1d2b;
+      --border: #5a2638;
+      --border-strong: #8a4059;
+      --text: #f5e7ec;
+      --muted: #cfadb8;
+      --muted-strong: #ad8492;
+      --muted-soft: #8f6875;
+      --accent: #ff8ba7;
+      --accent-hover: #ffadc0;
+      --accent-text: #16090f;
+      --success: #8ddfae;
+      --success-bg: #1e3325;
+      --success-border: #4b9867;
+      --success-text: #d9f5e4;
+    }
+
+    body[data-theme="frost"] {
+      --bg: #07131d;
+      --header-bg: linear-gradient(135deg, #0b2233 0%, #173d54 50%, #07131d 100%);
+      --panel: #0d1d2a;
+      --panel-strong: #132b3a;
+      --panel-hover: #1d3a4d;
+      --border: #244b63;
+      --border-strong: #3e7898;
+      --text: #e8f3f8;
+      --muted: #acc7d4;
+      --muted-strong: #87aaba;
+      --muted-soft: #6b8c9b;
+      --accent: #7cc7e8;
+      --accent-hover: #a1dcf3;
+      --accent-text: #06121a;
+      --success: #96d89d;
+      --success-bg: #17351f;
+      --success-border: #4f9659;
+      --success-text: #dcf5de;
+    }
+
+    body[data-theme="daylight"] {
+      --bg: #eef4f8;
+      --header-bg: linear-gradient(135deg, #f8fbfd 0%, #d7e8f2 52%, #edf5f9 100%);
+      --panel: #ffffff;
+      --panel-strong: #e8f1f6;
+      --panel-hover: #d8e8f0;
+      --border: #b7cad5;
+      --border-strong: #7896a6;
+      --text: #172a35;
+      --muted: #4f6875;
+      --muted-strong: #607986;
+      --muted-soft: #718895;
+      --accent: #1b6f95;
+      --accent-hover: #2c84ad;
+      --accent-text: #ffffff;
+      --success: #1d7a4a;
+      --success-bg: #dff3e8;
+      --success-border: #59a979;
+      --success-text: #155d38;
+      --shadow: rgba(23, 42, 53, 0.18);
+    }
+
+    body[data-theme="mint"] {
+      --bg: #eef8f2;
+      --header-bg: linear-gradient(135deg, #f7fcf9 0%, #d5f0df 52%, #eef8f2 100%);
+      --panel: #ffffff;
+      --panel-strong: #e3f2e9;
+      --panel-hover: #d2e9dc;
+      --border: #acc9b9;
+      --border-strong: #6f9b82;
+      --text: #173125;
+      --muted: #4f705f;
+      --muted-strong: #63836f;
+      --muted-soft: #759081;
+      --accent: #25744b;
+      --accent-hover: #32875a;
+      --accent-text: #ffffff;
+      --success: #197247;
+      --success-bg: #dff5e8;
+      --success-border: #59aa78;
+      --success-text: #125432;
+      --shadow: rgba(23, 49, 37, 0.18);
+    }
+
+    body[data-theme="blush"] {
+      --bg: #f8f0f4;
+      --header-bg: linear-gradient(135deg, #fff8fb 0%, #efd7e2 52%, #f8f0f4 100%);
+      --panel: #ffffff;
+      --panel-strong: #f4e7ed;
+      --panel-hover: #ead7e1;
+      --border: #cfb1bf;
+      --border-strong: #9f7588;
+      --text: #331a26;
+      --muted: #745567;
+      --muted-strong: #866578;
+      --muted-soft: #957688;
+      --accent: #a03b67;
+      --accent-hover: #b44f7a;
+      --accent-text: #ffffff;
+      --success: #247447;
+      --success-bg: #e2f3e8;
+      --success-border: #64a97c;
+      --success-text: #185632;
+      --shadow: rgba(51, 26, 38, 0.18);
+    }
+
     body {
-      background: #0a0a1a;
-      color: #e0e0e0;
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
     }
@@ -136,6 +288,7 @@
       letter-spacing: 0.08em;
       padding: 8px 10px;
       text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .country-list {
@@ -573,6 +726,186 @@
       color: #e53935;
     }
 
+    .settings-panel {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 400;
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 8px;
+      align-items: end;
+      background: color-mix(in srgb, var(--panel) 94%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 10px 28px var(--shadow);
+      padding: 10px;
+    }
+
+    .settings-field {
+      display: grid;
+      gap: 4px;
+    }
+
+    .settings-label {
+      color: var(--muted);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .settings-select {
+      min-width: 118px;
+      background: var(--panel-strong);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.76rem;
+      outline: none;
+      padding: 6px 8px;
+    }
+
+    .settings-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 24%, transparent);
+    }
+
+    header {
+      background: var(--header-bg);
+      border-bottom-color: var(--accent);
+    }
+
+    header h1,
+    .tab-bar button.active,
+    .country-sidebar-title,
+    .missing-tooltip-label,
+    .section-title,
+    .compare-title,
+    .compare-result-name {
+      color: var(--accent);
+    }
+
+    .stats-bar,
+    .country-row,
+    .compare-result-row,
+    .filter-bar button,
+    .reset-btn,
+    .export-btn {
+      color: var(--muted);
+    }
+
+    .stats-bar span strong,
+    .compare-result-row strong {
+      color: var(--text);
+    }
+
+    .tab-bar button {
+      color: var(--muted-strong);
+    }
+
+    .tab-bar button:hover {
+      color: var(--text);
+    }
+
+    .tab-bar button.active {
+      border-bottom-color: var(--accent);
+    }
+
+    .filter-bar button,
+    .reset-btn,
+    .export-btn {
+      border-color: var(--border-strong);
+    }
+
+    .filter-bar button:hover,
+    .filter-bar button.active,
+    .compare-btn {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-text);
+    }
+
+    .compare-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    .country-sidebar,
+    .country-sidebar-title,
+    .compare-result-block {
+      background: var(--panel);
+      border-color: var(--border);
+    }
+
+    .country-row:hover {
+      background: var(--panel-strong);
+      border-color: var(--border-strong);
+      color: var(--text);
+    }
+
+    .country-row.complete {
+      background: var(--success-bg);
+      border-color: var(--success-border);
+      color: var(--success-text);
+    }
+
+    .country-row.complete .country-completion,
+    .section-progress .count,
+    .compare-match,
+    .export-btn:hover {
+      color: var(--success);
+    }
+
+    .country-completion,
+    .section-progress,
+    .compare-none {
+      color: var(--muted-soft);
+    }
+
+    .missing-tooltip {
+      background: var(--bg);
+      border-color: var(--accent);
+      box-shadow: 0 10px 28px var(--shadow);
+      color: var(--text);
+    }
+
+    .section-header,
+    .sticker,
+    .compare-input,
+    .compare-mode,
+    .compare-textarea {
+      border-color: var(--border);
+    }
+
+    .sticker,
+    .compare-input,
+    .compare-mode,
+    .compare-textarea {
+      background: var(--panel-strong);
+      color: var(--text);
+    }
+
+    .sticker:hover {
+      border-color: var(--border-strong);
+    }
+
+    .sticker .code {
+      color: var(--muted-strong);
+    }
+
+    .compare-input:focus,
+    .compare-mode:focus,
+    .compare-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .reset-btn:hover,
+    .compare-remove-btn:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
     @media (max-width: 900px) {
       .album-layout {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -602,6 +935,18 @@
         grid-template-columns: 1fr;
       }
 
+      .settings-panel {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .settings-select {
+        min-width: 0;
+        width: 100%;
+      }
+
       .grid {
         grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
         gap: 5px;
@@ -622,10 +967,10 @@
   <h1>Panini FIFA World Cup 2026 &mdash; Sticker Album</h1>
   <div class="header-row">
     <div class="stats-bar">
-      <span>Owned: <strong id="stat-owned">0</strong> / 994</span>
-      <span>Missing: <strong id="stat-missing">994</strong></span>
-      <span>Extras: <strong id="stat-extras">0</strong></span>
-      <span>Completion: <strong id="stat-pct">0%</strong></span>
+      <span><span id="owned-label">Owned</span>: <strong id="stat-owned">0</strong> / 994</span>
+      <span><span id="missing-label">Missing</span>: <strong id="stat-missing">994</strong></span>
+      <span><span id="extras-label">Extras</span>: <strong id="stat-extras">0</strong></span>
+      <span><span id="completion-label">Completion</span>: <strong id="stat-pct">0%</strong></span>
     </div>
     <button class="export-btn" id="export-btn">Export</button>
     <button class="reset-btn" id="reset-btn">Reset All</button>
@@ -645,18 +990,40 @@
 <div class="tab-panel active" id="panel-album">
   <div class="album-layout">
     <aside class="country-sidebar" aria-label="Country completion">
-      <div class="country-sidebar-title">Complete Sections: <span id="complete-sections-count">0</span> / <span id="complete-sections-total">0</span></div>
+      <div class="country-sidebar-title"><span id="complete-sections-label">Complete Sections</span>: <span id="complete-sections-count">0</span> / <span id="complete-sections-total">0</span></div>
       <div class="country-list" id="country-list-left"></div>
     </aside>
     <main id="main"></main>
     <aside class="country-sidebar" aria-label="More country completion">
-      <div class="country-sidebar-title">Sections</div>
+      <div class="country-sidebar-title" id="sections-label">Sections</div>
       <div class="country-list" id="country-list-right"></div>
     </aside>
   </div>
 </div>
 
 <div class="missing-tooltip" id="missing-tooltip"></div>
+
+<div class="settings-panel" aria-label="Display settings">
+  <label class="settings-field">
+    <span class="settings-label" id="language-label">Language</span>
+    <select class="settings-select" id="language-select">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </select>
+  </label>
+  <label class="settings-field">
+    <span class="settings-label" id="theme-label">Theme</span>
+    <select class="settings-select" id="theme-select">
+      <option value="default">Midnight Gold</option>
+      <option value="emerald">Emerald</option>
+      <option value="ruby">Ruby</option>
+      <option value="frost">Frost</option>
+      <option value="daylight">Daylight</option>
+      <option value="mint">Mint</option>
+      <option value="blush">Blush</option>
+    </select>
+  </label>
+</div>
 
 <div class="tab-panel" id="panel-compare">
   <div class="compare-section">
@@ -740,6 +1107,151 @@ const ALBUM_DATA = {
 // state: { [id]: 0 = missing, 1 = owned, 2+ = owned + (n-1) extras }
 let state = {};
 let saveTimer = null;
+let currentLanguage = localStorage.getItem('fwc-language') || 'en';
+let currentTheme = localStorage.getItem('fwc-theme') || 'default';
+
+const I18N = {
+  en: {
+    albumTitle: 'Panini FIFA World Cup 2026 — Sticker Album',
+    owned: 'Owned',
+    missing: 'Missing',
+    extras: 'Extras',
+    completion: 'Completion',
+    export: 'Export',
+    reset: 'Reset All',
+    album: 'Album',
+    compare: 'Compare',
+    all: 'All',
+    missingFilter: 'Missing',
+    ownedFilter: 'Owned',
+    extrasFilter: 'Extras',
+    completeSections: 'Complete Sections',
+    sections: 'Sections',
+    fwcSection: 'FWC — Special Stickers',
+    cocaCola: 'Coca-Cola',
+    language: 'Language',
+    theme: 'Theme',
+    midnightGold: 'Midnight Gold',
+    emerald: 'Emerald',
+    ruby: 'Ruby',
+    frost: 'Frost',
+    daylight: 'Daylight',
+    mint: 'Mint',
+    blush: 'Blush',
+    compareTitle: 'Compare',
+    namePlaceholder: 'Name (optional)',
+    extrasMode: "Their Extras → my missing",
+    missingMode: "Their Missing → my extras",
+    pastePlaceholder: 'Paste exported sticker list here…',
+    compareButton: 'Compare',
+    missingTooltip: 'Missing',
+    complete: 'Complete!',
+    resetConfirm: 'Reset all sticker data? This cannot be undone.',
+    noMatches: 'No matches found.',
+    parseError: 'Could not parse any sticker IDs from the pasted text.',
+    extrasModeLabel: "stickers they have extra that you're missing",
+    missingModeLabel: 'stickers they need that you have extra',
+    matches: 'matches',
+    match: 'match',
+    remove: 'Remove',
+    filterLabels: { all: 'All', missing: 'Missing', owned: 'Owned', extras: 'Extras' },
+    countryNames: {}
+  },
+  es: {
+    albumTitle: 'Álbum de estampas Panini FIFA World Cup 2026',
+    owned: 'Tengo',
+    missing: 'Faltan',
+    extras: 'Repetidas',
+    completion: 'Completado',
+    export: 'Exportar',
+    reset: 'Reiniciar',
+    album: 'Álbum',
+    compare: 'Comparar',
+    all: 'Todas',
+    missingFilter: 'Faltantes',
+    ownedFilter: 'Tengo',
+    extrasFilter: 'Repetidas',
+    completeSections: 'Secciones completas',
+    sections: 'Secciones',
+    fwcSection: 'FWC — Estampas especiales',
+    cocaCola: 'Coca-Cola',
+    language: 'Idioma',
+    theme: 'Tema',
+    midnightGold: 'Medianoche dorada',
+    emerald: 'Esmeralda',
+    ruby: 'Rubí',
+    frost: 'Hielo',
+    daylight: 'Día claro',
+    mint: 'Menta',
+    blush: 'Rosa',
+    compareTitle: 'Comparar',
+    namePlaceholder: 'Nombre (opcional)',
+    extrasMode: 'Sus repetidas → mis faltantes',
+    missingMode: 'Sus faltantes → mis repetidas',
+    pastePlaceholder: 'Pega aquí la lista exportada de estampas…',
+    compareButton: 'Comparar',
+    missingTooltip: 'Faltantes',
+    complete: '¡Completa!',
+    resetConfirm: '¿Reiniciar todos los datos? Esta acción no se puede deshacer.',
+    noMatches: 'No se encontraron coincidencias.',
+    parseError: 'No se pudo leer ninguna estampa del texto pegado.',
+    extrasModeLabel: 'estampas que tiene repetidas y a ti te faltan',
+    missingModeLabel: 'estampas que necesita y tú tienes repetidas',
+    matches: 'coincidencias',
+    match: 'coincidencia',
+    remove: 'Eliminar',
+    filterLabels: { all: 'Todas', missing: 'Faltantes', owned: 'Tengo', extras: 'Repetidas' },
+    countryNames: {
+      ALG: 'Argelia',
+      ARG: 'Argentina',
+      AUS: 'Australia',
+      AUT: 'Austria',
+      BEL: 'Bélgica',
+      BIH: 'Bosnia y Herzegovina',
+      BRA: 'Brasil',
+      CAN: 'Canadá',
+      CPV: 'Cabo Verde',
+      COL: 'Colombia',
+      CRO: 'Croacia',
+      CUW: 'Curazao',
+      CZE: 'Chequia',
+      COD: 'RD Congo',
+      ECU: 'Ecuador',
+      EGY: 'Egipto',
+      ENG: 'Inglaterra',
+      FRA: 'Francia',
+      GER: 'Alemania',
+      GHA: 'Ghana',
+      HAI: 'Haití',
+      IRN: 'Irán',
+      IRQ: 'Irak',
+      JPN: 'Japón',
+      JOR: 'Jordania',
+      MAR: 'Marruecos',
+      MEX: 'México',
+      NED: 'Países Bajos',
+      NZL: 'Nueva Zelanda',
+      NOR: 'Noruega',
+      PAN: 'Panamá',
+      PAR: 'Paraguay',
+      POR: 'Portugal',
+      QAT: 'Catar',
+      KSA: 'Arabia Saudita',
+      SCO: 'Escocia',
+      SEN: 'Senegal',
+      RSA: 'Sudáfrica',
+      KOR: 'Corea del Sur',
+      ESP: 'España',
+      SWE: 'Suecia',
+      SUI: 'Suiza',
+      TUN: 'Túnez',
+      TUR: 'Turquía',
+      USA: 'Estados Unidos',
+      URU: 'Uruguay',
+      UZB: 'Uzbekistán'
+    }
+  }
+};
 
 async function loadState() {
   try {
@@ -757,6 +1269,83 @@ function saveState() {
       body: JSON.stringify(state)
     });
   }, 300);
+}
+
+function getText() {
+  return I18N[currentLanguage] || I18N.en;
+}
+
+function applyTheme(theme) {
+  if (!document.querySelector(`#theme-select option[value="${theme}"]`)) theme = 'default';
+  currentTheme = theme;
+  document.body.dataset.theme = theme;
+  document.getElementById('theme-select').value = theme;
+  localStorage.setItem('fwc-theme', theme);
+  updateSidebarOffset();
+}
+
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function applyLanguage(language) {
+  if (!I18N[language]) language = 'en';
+  currentLanguage = language;
+  const text = getText();
+  document.documentElement.lang = language;
+  document.getElementById('language-select').value = language;
+  localStorage.setItem('fwc-language', language);
+
+  setText('owned-label', text.owned);
+  setText('missing-label', text.missing);
+  setText('extras-label', text.extras);
+  setText('completion-label', text.completion);
+  setText('export-btn', text.export);
+  setText('reset-btn', text.reset);
+  setText('complete-sections-label', text.completeSections);
+  setText('sections-label', text.sections);
+  setText('language-label', text.language);
+  setText('theme-label', text.theme);
+
+  const title = document.querySelector('header h1');
+  if (title) title.textContent = text.albumTitle;
+
+  const albumTab = document.querySelector('.tab-bar button[data-tab="album"]');
+  const compareTab = document.querySelector('.tab-bar button[data-tab="compare"]');
+  if (albumTab) albumTab.textContent = text.album;
+  if (compareTab) compareTab.textContent = text.compare;
+
+  document.querySelectorAll('#filter-bar button').forEach(button => {
+    const labels = {
+      all: text.all,
+      missing: text.missingFilter,
+      owned: text.ownedFilter,
+      extras: text.extrasFilter
+    };
+    button.textContent = labels[button.dataset.filter] || button.textContent;
+  });
+
+  document.querySelector('#theme-select option[value="default"]').textContent = text.midnightGold;
+  document.querySelector('#theme-select option[value="emerald"]').textContent = text.emerald;
+  document.querySelector('#theme-select option[value="ruby"]').textContent = text.ruby;
+  document.querySelector('#theme-select option[value="frost"]').textContent = text.frost;
+  document.querySelector('#theme-select option[value="daylight"]').textContent = text.daylight;
+  document.querySelector('#theme-select option[value="mint"]').textContent = text.mint;
+  document.querySelector('#theme-select option[value="blush"]').textContent = text.blush;
+
+  const compareTitle = document.querySelector('.compare-title');
+  if (compareTitle) compareTitle.textContent = text.compareTitle;
+  document.getElementById('compare-name').placeholder = text.namePlaceholder;
+  document.getElementById('compare-mode').options[0].textContent = text.extrasMode;
+  document.getElementById('compare-mode').options[1].textContent = text.missingMode;
+  document.getElementById('compare-paste').placeholder = text.pastePlaceholder;
+  document.getElementById('compare-btn').textContent = text.compareButton;
+
+  updateSectionTitles();
+  updateCountryList();
+  updateSidebarOffset();
+  loadCompareHistory();
 }
 
 function getVal(id) { return state[id] || 0; }
@@ -806,6 +1395,31 @@ function getSectionFlag(stickers) {
   const firstId = stickers[0] || '';
   const prefix = firstId.replace(/\d+$/, '');
   return FLAG[firstId] || FLAG[prefix] || '';
+}
+
+function getTeamName(team) {
+  return getText().countryNames[team.code] || team.name;
+}
+
+function getSectionTitle(sectionKey) {
+  const text = getText();
+  if (sectionKey === 'PANINI') return 'Panini';
+  if (sectionKey === 'FWC') return text.fwcSection;
+  if (sectionKey === 'CC') return text.cocaCola;
+  const team = ALBUM_DATA.teams.find(item => item.code === sectionKey);
+  return team ? `${team.code} — ${getTeamName(team)}` : sectionKey;
+}
+
+function updateSectionTitles() {
+  document.querySelectorAll('.section[data-group]').forEach(section => {
+    const title = getSectionTitle(section.dataset.group);
+    const firstSticker = section.querySelector('.sticker');
+    const titleEl = section.querySelector('.section-title');
+    if (!titleEl || !firstSticker) return;
+    const flag = getSectionFlag([firstSticker.dataset.id]);
+    titleEl.textContent = flag ? `${flag} ${title}` : title;
+    section.dataset.title = title;
+  });
 }
 
 function buildSection(title, stickers, isFoil, extraClass, sectionKey) {
@@ -880,11 +1494,11 @@ function getSidebarSections() {
     { key: 'FWC', name: 'FWC', flag: FLAG.FWC, ids: ALBUM_DATA.special },
     ...ALBUM_DATA.teams.map(team => ({
       key: team.code,
-      name: team.name,
+      name: getTeamName(team),
       flag: FLAG[team.code],
       ids: Array.from({length: team.count}, (_, i) => team.code + (i + 1))
     })),
-    { key: 'CC', name: 'Coca-Cola', flag: FLAG.CC, ids: ALBUM_DATA.cocacola }
+    { key: 'CC', name: getText().cocaCola, flag: FLAG.CC, ids: ALBUM_DATA.cocacola }
   ];
 }
 
@@ -896,7 +1510,7 @@ function getMissingLabel(ids) {
   const missing = ids
     .filter(id => getVal(id) < 1)
     .map(id => id.replace(/^[A-Za-z]+/, ''));
-  return missing.length === 0 ? 'Complete!' : missing.join(', ');
+  return missing.length === 0 ? getText().complete : missing.join(', ');
 }
 
 function positionMissingTooltip(x, y) {
@@ -920,12 +1534,12 @@ function positionMissingTooltip(x, y) {
 function showMissingTooltip(text, x, y) {
   const tooltip = document.getElementById('missing-tooltip');
   tooltip.textContent = '';
-  if (text === 'Complete!') {
+  if (text === getText().complete) {
     tooltip.textContent = text;
   } else {
     const label = document.createElement('span');
     label.className = 'missing-tooltip-label';
-    label.textContent = 'Missing';
+    label.textContent = getText().missingTooltip;
     tooltip.appendChild(label);
     tooltip.appendChild(document.createTextNode(text));
   }
@@ -1004,6 +1618,11 @@ function updateCountryList() {
     const pct = Math.round((owned / total) * 100);
     const isComplete = owned === total;
     if (isComplete) completeSections++;
+    const name = row.querySelector('.country-name');
+    if (name) {
+      const flag = sectionData.flag || '';
+      name.textContent = flag ? `${flag} ${sectionData.name}` : sectionData.name;
+    }
     row.classList.toggle('complete', isComplete);
     row.dataset.missing = getMissingLabel(sectionData.ids);
     row.querySelector('.country-completion').textContent = `${owned}/${total} ${pct}%`;
@@ -1097,10 +1716,7 @@ const FLAG = {
 function exportList() {
   // Gather all visible sections
   const lines = [];
-  const filterLabel = currentFilter === 'all' ? 'All'
-    : currentFilter === 'missing' ? 'Missing'
-    : currentFilter === 'owned' ? 'Owned'
-    : 'Extras';
+  const filterLabel = getText().filterLabels[currentFilter] || getText().filterLabels.all;
 
   lines.push(`Panini FIFA World Cup 2026 — ${filterLabel} Stickers`);
   lines.push('');
@@ -1193,25 +1809,26 @@ function computeMatches(theirIds, mode) {
 }
 
 function renderCompareBlock(entry) {
+  const text = getText();
   const { id, name, mode, grouped } = entry;
   const prefixes = Object.keys(grouped);
   const totalMatches = prefixes.reduce((s, p) => s + grouped[p].length, 0);
   const modeLabel = mode === 'extras'
-    ? "stickers they have extra that you're missing"
-    : "stickers they need that you have extra";
+    ? text.extrasModeLabel
+    : text.missingModeLabel;
 
   const block = document.createElement('div');
   block.className = 'compare-result-block';
   block.dataset.id = id;
 
   let html = `<div class="compare-result-header">
-    <div class="compare-result-name">${name} — ${totalMatches} match${totalMatches !== 1 ? 'es' : ''}</div>
-    <button class="compare-remove-btn" data-id="${id}">Remove</button>
+    <div class="compare-result-name">${name} — ${totalMatches} ${totalMatches === 1 ? text.match : text.matches}</div>
+    <button class="compare-remove-btn" data-id="${id}">${text.remove}</button>
   </div>`;
   html += `<div class="compare-result-row" style="margin-bottom:10px;font-size:0.72rem;color:#666;">${modeLabel}</div>`;
 
   if (totalMatches === 0) {
-    html += `<div class="compare-none">No matches found.</div>`;
+    html += `<div class="compare-none">${text.noMatches}</div>`;
   } else {
     for (const prefix of prefixes.sort()) {
       const flag = FLAG[prefix] || '';
@@ -1256,7 +1873,10 @@ async function runCompare() {
 
   const theirIds = parsePaste(paste);
   if (theirIds.size === 0) {
-    resultsEl.insertAdjacentHTML('afterbegin', '<p class="compare-none">Could not parse any sticker IDs from the pasted text.</p>');
+    const message = document.createElement('p');
+    message.className = 'compare-none';
+    message.textContent = getText().parseError;
+    resultsEl.insertBefore(message, resultsEl.firstChild);
     return;
   }
 
@@ -1277,7 +1897,7 @@ async function runCompare() {
 document.getElementById('compare-btn').addEventListener('click', runCompare);
 
 document.getElementById('reset-btn').addEventListener('click', () => {
-  if (confirm('Reset all sticker data? This cannot be undone.')) {
+  if (confirm(getText().resetConfirm)) {
     state = {};
     saveState();
     refreshAllStickers();
@@ -1287,18 +1907,27 @@ document.getElementById('reset-btn').addEventListener('click', () => {
   }
 });
 
+document.getElementById('language-select').addEventListener('change', e => {
+  applyLanguage(e.target.value);
+});
+
+document.getElementById('theme-select').addEventListener('change', e => {
+  applyTheme(e.target.value);
+});
+
 // Init
 updateSidebarOffset();
 window.addEventListener('resize', updateSidebarOffset);
 buildAlbum();
 buildCountryList();
+applyTheme(currentTheme);
+applyLanguage(currentLanguage);
 loadState().then(() => {
   updateSidebarOffset();
   refreshAllStickers();
   updateStats();
   updateCountryList();
 });
-loadCompareHistory();
 </script>
 </body>
 </html>
